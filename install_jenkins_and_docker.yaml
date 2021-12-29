@@ -3,19 +3,18 @@
   hosts: localhost
   remote_user: ec2-user
   become: true
-  
-  tasks:
 
+  tasks:
     - name: install dependencies
       yum:
         name: "{{ package }} "
         state: present
       vars:
         package:
-        - wget
-        - java-1.8.0-openjdk-devel
-        - git
-        - yum-utils
+          - wget
+          - java-1.8.0-openjdk-devel
+          - git
+          - yum-utils
 
     - name: Download Jenkins Repo
       get_url:
@@ -26,6 +25,9 @@
       rpm_key:
         state: present
         key: https://pkg.jenkins.io/redhat/jenkins.io.key
+
+    - name: Install epel if repo does not exist
+      command: amazon-linux-extras install epel -y
 
     - name: Install Jenkins
       yum:
